@@ -19,7 +19,7 @@ function GuessWinner({ selectedCharacter, setIsSelecting, roomId, playerId }: Gu
     const unsubscribe = onSnapshot(roomRef, (doc) => {
       const data = doc.data();
       if (data) {
-        setMySecretCharacter(data.secretCharacters?.[playerId] || null); // Mi personaje secreto, que el oponente adivina
+        setMySecretCharacter(data.secretCharacters?.[playerId] || null);
       }
     });
     return () => unsubscribe();
@@ -31,7 +31,7 @@ function GuessWinner({ selectedCharacter, setIsSelecting, roomId, playerId }: Gu
       return;
     }
     if (!mySecretCharacter) return;
-    const isCorrect = selectedCharacter.id === mySecretCharacter.id; // Comparo con mi propio personaje secreto
+    const isCorrect = selectedCharacter.id === mySecretCharacter.id;
     const roomRef = doc(db, "rooms", roomId);
     await setDoc(roomRef, { guessedCharacter: selectedCharacter }, { merge: true });
     alert(isCorrect ? "¡Correcto! Ganaste." : "Incorrecto, intenta de nuevo.");

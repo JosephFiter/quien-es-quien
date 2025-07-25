@@ -9,8 +9,8 @@ export interface Character {
 export interface Room {
   id: string;
   players: string[];
-  secretCharacters: { [playerId: string]: Character }; // Personaje secreto de cada jugador
-  markedCharacters: number[];
+  secretCharacters: { [playerId: string]: Character };
+  markedCharactersByPlayer: { [playerId: string]: number[] }; // Marcados por jugador
   guessedCharacter?: Character;
   createdAt: number;
 }

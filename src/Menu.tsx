@@ -33,7 +33,18 @@ const initialCharacters: Character[] = [
   { id: 25, name: "Laura Kaleka", image: "https://via.placeholder.com/100?text=Laura%20Kaleka" },
   { id: 26, name: "Liel", image: "https://via.placeholder.com/100?text=Liel" },
   { id: 27, name: "Ana", image: "https://via.placeholder.com/100?text=Ana" },
+  { id: 28, name: "Dominic", image: "https://via.placeholder.com/100?text=Dominic" },
+  { id: 29, name: "Mica la Tana", image: "https://via.placeholder.com/100?text=Mica%20la%20Tana" },
+  { id: 30, name: "Mica Son", image: "https://via.placeholder.com/100?text=Mica%20Son" },
+  { id: 31, name: "Aby", image: "https://via.placeholder.com/100?text=Aby" },
+  { id: 32, name: "Castre", image: "https://via.placeholder.com/100?text=Castre" },
+  { id: 33, name: "Ian Stupnik", image: "https://via.placeholder.com/100?text=Ian%20Stupnik" },
+  { id: 34, name: "Ian Dorfman", image: "https://via.placeholder.com/100?text=Ian%20Dorfman" },
+  { id: 35, name: "Naguito", image: "https://via.placeholder.com/100?text=Naguito" },
+  { id: 36, name: "More", image: "https://via.placeholder.com/100?text=More" },
+  { id: 37, name: "Cata", image: "https://via.placeholder.com/100?text=Cata" },
 ];
+
 interface MenuProps {
   onJoinRoom: (roomId: string) => void;
   playerId: string;
@@ -48,8 +59,8 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
     const secretCharacter = initialCharacters[randomIndex];
     const roomData = {
       players: [playerId],
-      secretCharacters: { [playerId]: secretCharacter }, // Personaje secreto del creador
-      markedCharacters: [],
+      secretCharacters: { [playerId]: secretCharacter },
+      markedCharactersByPlayer: { [playerId]: [] }, // Inicializamos marcados para el creador
       createdAt: Date.now(),
     };
     const roomRef = await addDoc(collection(db, "rooms"), roomData);
@@ -59,7 +70,6 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
   };
 
   const joinRoom = async () => {
-    
     if (!roomCode) {
       setError("Ingresa un código de sala");
       return;
@@ -83,6 +93,7 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
         await updateDoc(roomRef, {
           players: [...existingPlayers, playerId],
           [`secretCharacters.${playerId}`]: secretCharacter,
+          [`markedCharactersByPlayer.${playerId}`]: [], // Inicializamos marcados para el nuevo jugador
         });
       }
       onJoinRoom(roomCode);

@@ -10,7 +10,7 @@
 
 .secret-card {
   display: inline-block;
-  border: 2px solid green; /* Borde verde para destacar el personaje secreto */
+  border: 2px solid green;
   padding: 10px;
   border-radius: 5px;
 }

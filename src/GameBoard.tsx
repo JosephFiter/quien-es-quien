@@ -33,7 +33,18 @@ const initialCharacters: Character[] = [
   { id: 25, name: "Laura Kaleka", image: "https://via.placeholder.com/100?text=Laura%20Kaleka" },
   { id: 26, name: "Liel", image: "https://via.placeholder.com/100?text=Liel" },
   { id: 27, name: "Ana", image: "https://via.placeholder.com/100?text=Ana" },
+  { id: 28, name: "Dominic", image: "https://via.placeholder.com/100?text=Dominic" },
+  { id: 29, name: "Mica la Tana", image: "https://via.placeholder.com/100?text=Mica%20la%20Tana" },
+  { id: 30, name: "Mica Son", image: "https://via.placeholder.com/100?text=Mica%20Son" },
+  { id: 31, name: "Aby", image: "https://via.placeholder.com/100?text=Aby" },
+  { id: 32, name: "Castre", image: "https://via.placeholder.com/100?text=Castre" },
+  { id: 33, name: "Ian Stupnik", image: "https://via.placeholder.com/100?text=Ian%20Stupnik" },
+  { id: 34, name: "Ian Dorfman", image: "https://via.placeholder.com/100?text=Ian%20Dorfman" },
+  { id: 35, name: "Naguito", image: "https://via.placeholder.com/100?text=Naguito" },
+  { id: 36, name: "More", image: "https://via.placeholder.com/100?text=More" },
+  { id: 37, name: "Cata", image: "https://via.placeholder.com/100?text=Cata" },
 ];
+
 
 interface GameBoardProps {
   setSelectedCharacter: (char: Character | null) => void;
@@ -52,9 +63,9 @@ function GameBoard({ setSelectedCharacter, isSelecting, setIsSelecting, roomId, 
     const unsubscribe = onSnapshot(roomRef, (doc) => {
       const data = doc.data();
       if (data && data.players && data.secretCharacters) {
-        const otherPlayerId = data.players.find((id: string) => id !== playerId); // Encontramos al otro jugador
+        const otherPlayerId = data.players.find((id: string) => id !== playerId);
         setOpponentSecretCharacter(otherPlayerId ? data.secretCharacters[otherPlayerId] : null);
-        const markedIds = data.markedCharacters || [];
+        const markedIds = data.markedCharactersByPlayer?.[playerId] || []; // Solo los marcados del jugador actual
         setCharacters(
           initialCharacters.map((char) => ({
             ...char,
@@ -73,7 +84,9 @@ function GameBoard({ setSelectedCharacter, isSelecting, setIsSelecting, roomId, 
     );
     setCharacters(newCharacters);
     const markedIds = newCharacters.filter((char) => char.isSelected).map((char) => char.id);
-    await updateDoc(roomRef, { markedCharacters: markedIds });
+    await updateDoc(roomRef, {
+      [`markedCharactersByPlayer.${playerId}`]: markedIds, // Actualizamos solo los marcados del jugador
+    });
   };
 
   const handleCharacterClick = (char: Character) => {
