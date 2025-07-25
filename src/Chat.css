@@ -1,0 +1,12 @@
+/* src/components/Chat.css */
+.chat {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .messages {
+    height: 200px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }

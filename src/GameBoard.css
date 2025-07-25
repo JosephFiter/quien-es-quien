@@ -1,0 +1,49 @@
+/* src/components/GameBoard.css */
+.game-board {
+  width: 70%;
+}
+
+.secret-character {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.secret-card {
+  display: inline-block;
+  border: 2px solid green; /* Borde verde para destacar el personaje secreto */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.character-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.character-card:hover {
+  background-color: #f0f0f0;
+}
+
+.character-card.selected {
+  border: 2px solid red;
+}
+
+.character-card.selecting {
+  cursor: crosshair;
+  background-color: #e0e0e0;
+}
+
+.character-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}

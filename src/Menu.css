@@ -1,0 +1,28 @@
+/* src/components/Menu.css */
+.menu {
+    text-align: center;
+    padding: 50px;
+  }
+  
+  .menu-options {
+    margin-top: 20px;
+  }
+  
+  .join-room {
+    margin-top: 20px;
+  }
+  
+  input {
+    padding: 5px;
+    margin-right: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
