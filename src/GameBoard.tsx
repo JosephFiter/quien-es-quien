@@ -43,6 +43,9 @@ const initialCharacters: Character[] = [
   { id: 35, name: "Naguito", image: "https://via.placeholder.com/100?text=Naguito" },
   { id: 36, name: "More", image: "https://via.placeholder.com/100?text=More" },
   { id: 37, name: "Cata", image: "https://via.placeholder.com/100?text=Cata" },
+  { id: 38, name: "Oli gucken", image: "https://via.placeholder.com/100?text=oligucken" },
+  { id: 39, name: "sol", image: "https://via.placeholder.com/100?text=sol" },
+  { id: 40, name: "martina rosental", image: "https://via.placeholder.com/100?text=martinarosental" },
 ];
 
 
