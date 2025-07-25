@@ -6,11 +6,34 @@ import { Character } from "./types";
 import "./Menu.css";
 
 const initialCharacters: Character[] = [
-  { id: 1, name: "Juan", image: "https://via.placeholder.com/100?text=Juan" },
-  { id: 2, name: "María", image: "https://via.placeholder.com/100?text=María" },
-  { id: 3, name: "Pedro", image: "https://via.placeholder.com/100?text=Pedro" },
+  { id: 1, name: "Vito", image: "https://via.placeholder.com/100?text=Vito" },
+  { id: 2, name: "Fefo", image: "https://via.placeholder.com/100?text=Fefo" },
+  { id: 3, name: "Pava", image: "https://via.placeholder.com/100?text=Pava" },
+  { id: 4, name: "Mauri", image: "https://via.placeholder.com/100?text=Mauri" },
+  { id: 5, name: "Suaya", image: "https://via.placeholder.com/100?text=Suaya" },
+  { id: 6, name: "Mati", image: "https://via.placeholder.com/100?text=Mati" },
+  { id: 7, name: "Juan", image: "https://via.placeholder.com/100?text=Juan" },
+  { id: 8, name: "Najenson", image: "https://via.placeholder.com/100?text=Najenson" },
+  { id: 9, name: "Adar", image: "https://via.placeholder.com/100?text=Adar" },
+  { id: 10, name: "Ronel", image: "https://via.placeholder.com/100?text=Ronel" },
+  { id: 11, name: "Leo", image: "https://via.placeholder.com/100?text=Leo" },
+  { id: 12, name: "Felix", image: "https://via.placeholder.com/100?text=Felix" },
+  { id: 13, name: "Oliber", image: "https://via.placeholder.com/100?text=Oliber" },
+  { id: 14, name: "Chapu", image: "https://via.placeholder.com/100?text=Chapu" },
+  { id: 15, name: "Burstein", image: "https://via.placeholder.com/100?text=Burstein" },
+  { id: 16, name: "Setton", image: "https://via.placeholder.com/100?text=Setton" },
+  { id: 17, name: "Uri", image: "https://via.placeholder.com/100?text=Uri" },
+  { id: 18, name: "Saban", image: "https://via.placeholder.com/100?text=Saban" },
+  { id: 19, name: "Pinky", image: "https://via.placeholder.com/100?text=Pinky" },
+  { id: 20, name: "Bistec", image: "https://via.placeholder.com/100?text=Bistec" },
+  { id: 21, name: "Lola Cadoche", image: "https://via.placeholder.com/100?text=Lola%20Cadoche" },
+  { id: 22, name: "Lola Kiperszmid", image: "https://via.placeholder.com/100?text=Lola%20Kiperszmid" },
+  { id: 23, name: "Porky", image: "https://via.placeholder.com/100?text=Porky" },
+  { id: 24, name: "Emma Turek", image: "https://via.placeholder.com/100?text=Emma%20Turek" },
+  { id: 25, name: "Laura Kaleka", image: "https://via.placeholder.com/100?text=Laura%20Kaleka" },
+  { id: 26, name: "Liel", image: "https://via.placeholder.com/100?text=Liel" },
+  { id: 27, name: "Ana", image: "https://via.placeholder.com/100?text=Ana" },
 ];
-
 interface MenuProps {
   onJoinRoom: (roomId: string) => void;
   playerId: string;
