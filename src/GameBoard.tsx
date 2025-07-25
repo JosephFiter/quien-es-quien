@@ -55,11 +55,14 @@ interface GameBoardProps {
   setIsSelecting: (value: boolean) => void;
   roomId: string;
   playerId: string;
+  onReturnToMenu: () => void;
 }
 
-function GameBoard({ setSelectedCharacter, isSelecting, setIsSelecting, roomId, playerId }: GameBoardProps) {
+function GameBoard({ setSelectedCharacter, isSelecting, setIsSelecting, roomId, playerId, onReturnToMenu }: GameBoardProps) {
   const [characters, setCharacters] = useState<Character[]>(initialCharacters);
   const [opponentSecretCharacter, setOpponentSecretCharacter] = useState<Character | null>(null);
+  const [gameResult, setGameResult] = useState<"win" | "lose" | null>(null);
+  const [gameState, setGameState] = useState<"playing" | "finished">("playing");
 
   useEffect(() => {
     const roomRef = doc(db, "rooms", roomId);
@@ -68,19 +71,27 @@ function GameBoard({ setSelectedCharacter, isSelecting, setIsSelecting, roomId, 
       if (data && data.players && data.secretCharacters) {
         const otherPlayerId = data.players.find((id: string) => id !== playerId);
         setOpponentSecretCharacter(otherPlayerId ? data.secretCharacters[otherPlayerId] : null);
-        const markedIds = data.markedCharactersByPlayer?.[playerId] || []; // Solo los marcados del jugador actual
+        const markedIds = data.markedCharactersByPlayer?.[playerId] || [];
         setCharacters(
           initialCharacters.map((char) => ({
             ...char,
             isSelected: markedIds.includes(char.id),
           }))
         );
+        setGameState(data.gameState || "playing");
+        if (data.gameState === "finished" && data.winnerId) {
+          setGameResult(data.winnerId === playerId ? "win" : "lose");
+          setTimeout(() => {
+            onReturnToMenu();
+          }, 3000);
+        }
       }
     });
     return () => unsubscribe();
-  }, [roomId, playerId]);
+  }, [roomId, playerId, onReturnToMenu]);
 
   const toggleCharacterSelection = async (id: number) => {
+    if (gameState !== "playing") return;
     const roomRef = doc(db, "rooms", roomId);
     const newCharacters = characters.map((char) =>
       char.id === id ? { ...char, isSelected: !char.isSelected } : char
@@ -88,11 +99,12 @@ function GameBoard({ setSelectedCharacter, isSelecting, setIsSelecting, roomId, 
     setCharacters(newCharacters);
     const markedIds = newCharacters.filter((char) => char.isSelected).map((char) => char.id);
     await updateDoc(roomRef, {
-      [`markedCharactersByPlayer.${playerId}`]: markedIds, // Actualizamos solo los marcados del jugador
+      [`markedCharactersByPlayer.${playerId}`]: markedIds,
     });
   };
 
   const handleCharacterClick = (char: Character) => {
+    if (gameState !== "playing") return;
     if (isSelecting) {
       setSelectedCharacter(char);
       setIsSelecting(false);
@@ -103,6 +115,12 @@ function GameBoard({ setSelectedCharacter, isSelecting, setIsSelecting, roomId, 
 
   return (
     <div className="game-board">
+      {gameResult && (
+        <div className={`game-result ${gameResult}`}>
+          <h2>{gameResult === "win" ? "¡Ganaste!" : "Perdiste"}</h2>
+          <p>Volverás al menú en unos segundos...</p>
+        </div>
+      )}
       <div className="secret-character">
         <h2>Personaje secreto del oponente:</h2>
         {opponentSecretCharacter ? (

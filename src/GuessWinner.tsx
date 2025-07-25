@@ -1,7 +1,7 @@
 // src/components/GuessWinner.tsx
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
-import { doc, setDoc, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, onSnapshot, getDoc } from "firebase/firestore";
 import { Character } from "./types";
 
 interface GuessWinnerProps {
@@ -31,10 +31,18 @@ function GuessWinner({ selectedCharacter, setIsSelecting, roomId, playerId }: Gu
       return;
     }
     if (!mySecretCharacter) return;
-    const isCorrect = selectedCharacter.id === mySecretCharacter.id;
     const roomRef = doc(db, "rooms", roomId);
-    await setDoc(roomRef, { guessedCharacter: selectedCharacter }, { merge: true });
-    alert(isCorrect ? "¡Correcto! Ganaste." : "Incorrecto, intenta de nuevo.");
+    const isCorrect = selectedCharacter.id === mySecretCharacter.id;
+    const winnerId = isCorrect ? playerId : (await getDoc(roomRef)).data()?.players.find((id: string) => id !== playerId);
+    await setDoc(
+      roomRef,
+      {
+        guessedCharacter: selectedCharacter,
+        gameState: "finished",
+        winnerId,
+      },
+      { merge: true }
+    );
   };
 
   const startSelecting = () => {

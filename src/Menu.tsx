@@ -1,7 +1,7 @@
 // src/components/Menu.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "./firebase";
-import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { Character } from "./types";
 import "./Menu.css";
 
@@ -43,6 +43,9 @@ const initialCharacters: Character[] = [
   { id: 35, name: "Naguito", image: "https://via.placeholder.com/100?text=Naguito" },
   { id: 36, name: "More", image: "https://via.placeholder.com/100?text=More" },
   { id: 37, name: "Cata", image: "https://via.placeholder.com/100?text=Cata" },
+  { id: 38, name: "Oli gucken", image: "https://via.placeholder.com/100?text=oligucken" },
+  { id: 39, name: "sol", image: "https://via.placeholder.com/100?text=sol" },
+  { id: 40, name: "martina rosental", image: "https://via.placeholder.com/100?text=martinarosental" },
 ];
 
 interface MenuProps {
@@ -53,6 +56,29 @@ interface MenuProps {
 function Menu({ onJoinRoom, playerId }: MenuProps) {
   const [roomCode, setRoomCode] = useState("");
   const [error, setError] = useState("");
+  const [availableRooms, setAvailableRooms] = useState<{ id: string; players: string[] }[]>([]);
+
+  // Escuchar salas con un solo jugador, menos de 30 minutos y gameState: "playing"
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "rooms"), (snapshot) => {
+      const rooms = snapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          players: doc.data().players || [],
+          createdAt: doc.data().createdAt || 0,
+          gameState: doc.data().gameState || "playing",
+        }))
+        .filter((room) => {
+          if (room.players.length !== 1 || room.players.includes(playerId)) return false;
+          if (room.gameState !== "playing") return false; // Excluir salas terminadas
+          const now = Date.now();
+          const ageMinutes = (now - room.createdAt) / (1000 * 60);
+          return ageMinutes < 30;
+        });
+      setAvailableRooms(rooms);
+    });
+    return () => unsubscribe();
+  }, [playerId]);
 
   const createRoom = async () => {
     const randomIndex = Math.floor(Math.random() * initialCharacters.length);
@@ -60,8 +86,9 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
     const roomData = {
       players: [playerId],
       secretCharacters: { [playerId]: secretCharacter },
-      markedCharactersByPlayer: { [playerId]: [] }, // Inicializamos marcados para el creador
+      markedCharactersByPlayer: { [playerId]: [] },
       createdAt: Date.now(),
+      gameState: "playing", // Inicializar estado
     };
     const roomRef = await addDoc(collection(db, "rooms"), roomData);
     const roomId = roomRef.id;
@@ -69,16 +96,27 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
     onJoinRoom(roomId);
   };
 
-  const joinRoom = async () => {
-    if (!roomCode) {
-      setError("Ingresa un código de sala");
-      return;
-    }
-    const roomRef = doc(db, "rooms", roomCode);
+  const joinRoom = async (roomId: string) => {
+    const roomRef = doc(db, "rooms", roomId);
     const roomSnap = await getDoc(roomRef);
     if (roomSnap.exists()) {
       const roomData = roomSnap.data();
       const existingPlayers = roomData.players || [];
+      const createdAt = roomData.createdAt || 0;
+      const now = Date.now();
+      const ageMinutes = (now - createdAt) / (1000 * 60);
+      if (ageMinutes >= 30) {
+        setError("La sala ha expirado (más de 30 minutos)");
+        return;
+      }
+      if (roomData.gameState === "finished") {
+        setError("La partida en esta sala ya ha terminado");
+        return;
+      }
+      if (existingPlayers.length >= 2) {
+        setError("La sala ya tiene 2 jugadores");
+        return;
+      }
       if (!existingPlayers.includes(playerId)) {
         const usedCharacters = Object.values(roomData.secretCharacters || {}) as Character[];
         const availableCharacters = initialCharacters.filter(
@@ -93,13 +131,18 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
         await updateDoc(roomRef, {
           players: [...existingPlayers, playerId],
           [`secretCharacters.${playerId}`]: secretCharacter,
-          [`markedCharactersByPlayer.${playerId}`]: [], // Inicializamos marcados para el nuevo jugador
+          [`markedCharactersByPlayer.${playerId}`]: [],
         });
       }
-      onJoinRoom(roomCode);
+      onJoinRoom(roomId);
     } else {
       setError("Sala no encontrada");
     }
+  };
+
+  const handleJoinRoomClick = (roomId: string) => {
+    setRoomCode(roomId);
+    joinRoom(roomId);
   };
 
   return (
@@ -114,9 +157,24 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
             onChange={(e) => setRoomCode(e.target.value)}
             placeholder="Código de sala"
           />
-          <button onClick={joinRoom}>Unirse a Sala</button>
+          <button onClick={() => joinRoom(roomCode)}>Unirse a Sala</button>
         </div>
         {error && <p className="error">{error}</p>}
+      </div>
+      <div className="available-rooms">
+        <h2>Salas Disponibles</h2>
+        {availableRooms.length > 0 ? (
+          <ul className="room-list">
+            {availableRooms.map((room) => (
+              <li key={room.id} className="room-item">
+                <span>Sala: {room.id}</span>
+                <button onClick={() => handleJoinRoomClick(room.id)}>Unirse</button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay salas disponibles con un jugador.</p>
+        )}
       </div>
     </div>
   );

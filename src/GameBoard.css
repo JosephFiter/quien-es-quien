@@ -1,6 +1,7 @@
 /* src/components/GameBoard.css */
 .game-board {
   width: 70%;
+  position: relative; /* Para posicionar el mensaje de resultado */
 }
 
 .secret-character {
@@ -46,4 +47,31 @@
   height: 100px;
   object-fit: cover;
   border-radius: 5px;
+}
+
+.game-result {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.game-result.win h2 {
+  color: #4caf50;
+}
+
+.game-result.lose h2 {
+  color: #ff4444;
+}
+
+.game-result p {
+  font-size: 16px;
 }

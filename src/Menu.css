@@ -1,28 +1,75 @@
 /* src/components/Menu.css */
 .menu {
-    text-align: center;
-    padding: 50px;
-  }
-  
-  .menu-options {
-    margin-top: 20px;
-  }
-  
-  .join-room {
-    margin-top: 20px;
-  }
-  
-  input {
-    padding: 5px;
-    margin-right: 10px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    margin: 5px;
-  }
-  
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
+  text-align: center;
+  padding: 20px;
+}
+
+.menu-options {
+  margin-bottom: 20px;
+}
+
+.menu-options button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.join-room {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.join-room input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.available-rooms {
+  margin-top: 20px;
+}
+
+.available-rooms h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.room-list {
+  list-style: none;
+  padding: 0;
+}
+
+.room-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.room-item span {
+  font-size: 16px;
+}
+
+.room-item button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+}
+
+.room-item button:hover {
+  background-color: #45a049;
+}
