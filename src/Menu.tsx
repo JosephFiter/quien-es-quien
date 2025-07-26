@@ -44,8 +44,8 @@ const initialCharacters: Character[] = [
   { id: 36, name: "More", image: "https://via.placeholder.com/100?text=More" },
   { id: 37, name: "Cata", image: "https://via.placeholder.com/100?text=Cata" },
   { id: 38, name: "Oli gucken", image: "https://via.placeholder.com/100?text=oligucken" },
-  { id: 39, name: "sol", image: "https://via.placeholder.com/100?text=sol" },
-  { id: 40, name: "martina rosental", image: "https://via.placeholder.com/100?text=martinarosental" },
+  { id: 39, name: "Sz", image: "https://via.placeholder.com/100?text=Sz" },
+  { id: 40, name: "Raizman", image: "https://via.placeholder.com/100?text=Raizman" },
 ];
 
 interface MenuProps {
@@ -70,7 +70,7 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
         }))
         .filter((room) => {
           if (room.players.length !== 1 || room.players.includes(playerId)) return false;
-          if (room.gameState !== "playing") return false; // Excluir salas terminadas
+          if (room.gameState !== "playing") return false;
           const now = Date.now();
           const ageMinutes = (now - room.createdAt) / (1000 * 60);
           return ageMinutes < 30;
@@ -88,7 +88,7 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
       secretCharacters: { [playerId]: secretCharacter },
       markedCharactersByPlayer: { [playerId]: [] },
       createdAt: Date.now(),
-      gameState: "playing", // Inicializar estado
+      gameState: "playing",
     };
     const roomRef = await addDoc(collection(db, "rooms"), roomData);
     const roomId = roomRef.id;
@@ -146,36 +146,61 @@ function Menu({ onJoinRoom, playerId }: MenuProps) {
   };
 
   return (
-    <div className="menu">
-      <h1>¿Quién es quién? - Online</h1>
-      <div className="menu-options">
-        <button onClick={createRoom}>Crear Sala</button>
-        <div className="join-room">
-          <input
-            type="text"
-            value={roomCode}
-            onChange={(e) => setRoomCode(e.target.value)}
-            placeholder="Código de sala"
-          />
-          <button onClick={() => joinRoom(roomCode)}>Unirse a Sala</button>
-        </div>
-        {error && <p className="error">{error}</p>}
-      </div>
-      <div className="available-rooms">
-        <h2>Salas Disponibles</h2>
-        {availableRooms.length > 0 ? (
-          <ul className="room-list">
-            {availableRooms.map((room) => (
-              <li key={room.id} className="room-item">
-                <span>Sala: {room.id}</span>
-                <button onClick={() => handleJoinRoomClick(room.id)}>Unirse</button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No hay salas disponibles con un jugador.</p>
-        )}
-      </div>
+    <div className="who-is-who-menu-container">
+      <header className="who-is-who-menu-header">
+        <h1 className="who-is-who-menu-title">¿Quién es quién? Tarbut</h1>
+      </header>
+      <main className="who-is-who-menu-content">
+        <section className="who-is-who-menu-options">
+          <button className="who-is-who-menu-create-button" onClick={createRoom}>
+            Crear Sala
+          </button>
+          <div className="who-is-who-menu-join-room">
+            <input
+              className="who-is-who-menu-room-code-input"
+              type="text"
+              value={roomCode}
+              onChange={(e) => setRoomCode(e.target.value)}
+              placeholder="Código de sala"
+            />
+            <button className="who-is-who-menu-join-button" onClick={() => joinRoom(roomCode)}>
+              Unirse a Sala
+            </button>
+          </div>
+          {error && <p className="who-is-who-menu-error">{error}</p>}
+        </section>
+        <section className="who-is-who-menu-available-rooms">
+          <h2 className="who-is-who-menu-rooms-title">Salas Disponibles</h2>
+          {availableRooms.length > 0 ? (
+            <ul className="who-is-who-menu-room-list">
+              {availableRooms.map((room) => (
+                <li key={room.id} className="who-is-who-menu-room-item">
+                  <span className="who-is-who-menu-room-id">Sala: {room.id}</span>
+                  <button
+                    className="who-is-who-menu-room-join-button"
+                    onClick={() => handleJoinRoomClick(room.id)}
+                  >
+                    Unirse
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="who-is-who-menu-no-rooms">No hay salas disponibles con un jugador.</p>
+          )}
+        </section>
+      </main>
+      <footer className="who-is-who-menu-footer">
+        <p className="who-is-who-menu-footer-text">Producido por Industrias Fiter</p>
+        <a
+          href="https://www.josephfiter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="who-is-who-menu-footer-button"
+        >
+          Visitar
+        </a>
+      </footer>
     </div>
   );
 }

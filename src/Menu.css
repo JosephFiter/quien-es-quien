@@ -1,75 +1,237 @@
 /* src/components/Menu.css */
-.menu {
-  text-align: center;
-  padding: 20px;
+
+/* Color Palette */
+:root {
+  --who-is-who-primary-blue: #203D62; /* Primary blue (requested) */
+  --who-is-who-secondary-blue: #206bc7; /* Lighter blue for accents */
+  --who-is-who-light-blue: #E6ECF5; /* Very light blue for backgrounds */
+  --who-is-who-dark-blue: #162A45; /* Darker blue for footer */
+  --who-is-who-accent-green: #10b981; /* Green for button hover */
+  --who-is-who-accent-red: #ef4444; /* Red for errors */
+  --who-is-who-text-dark: #1f2937; /* Dark text */
+  --who-is-who-text-light: #f9fafb; /* Light text */
+  --who-is-who-border-blue: #4b74a8; /* Border blue */
 }
 
-.menu-options {
-  margin-bottom: 20px;
-}
-
-.menu-options button {
-  margin: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.join-room {
+/* Reset and Base Styles */
+.who-is-who-menu-container {
   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, var(--who-is-who-secondary-blue), var(--who-is-who-primary-blue));
+  padding: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--who-is-who-text-dark);
+}
+
+/* Header */
+.who-is-who-menu-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.who-is-who-menu-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--who-is-who-text-light);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+}
+
+/* Main Content */
+.who-is-who-menu-content {
+  flex: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--who-is-who-light-blue);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--who-is-who-border-blue);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Options Section */
+.who-is-who-menu-options {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.who-is-who-menu-create-button,
+.who-is-who-menu-join-button,
+.who-is-who-menu-room-join-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--who-is-who-text-light);
+  background-color: var(--who-is-who-primary-blue);
+  border: 1px solid var(--who-is-who-secondary-blue);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.who-is-who-menu-create-button:hover,
+.who-is-who-menu-join-button:hover,
+.who-is-who-menu-room-join-button:hover {
+  background-color: var(--who-is-who-accent-green);
+  transform: translateY(-2px);
+}
+
+.who-is-who-menu-join-room {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
 }
 
-.join-room input {
-  padding: 10px;
-  font-size: 16px;
+.who-is-who-menu-room-code-input {
+  flex: 1;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--who-is-who-border-blue);
+  border-radius: 0.375rem;
+  background: var(--who-is-who-text-light);
+  color: var(--who-is-who-text-dark);
+  transition: border-color 0.3s ease;
 }
 
-.error {
-  color: red;
-  margin-top: 10px;
+.who-is-who-menu-room-code-input:focus {
+  outline: none;
+  border-color: var(--who-is-who-secondary-blue);
+  box-shadow: 0 0 0 3px rgba(53, 94, 143, 0.1);
 }
 
-.available-rooms {
-  margin-top: 20px;
+.who-is-who-menu-error {
+  color: var(--who-is-who-accent-red);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
 }
 
-.available-rooms h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
+/* Available Rooms Section */
+.who-is-who-menu-available-rooms {
+  text-align: center;
 }
 
-.room-list {
+.who-is-who-menu-rooms-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--who-is-who-primary-blue);
+  margin-bottom: 1rem;
+}
+
+.who-is-who-menu-room-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-.room-item {
+.who-is-who-menu-room-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: 5px;
-  border-radius: 5px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: var(--who-is-who-light-blue);
+  border: 1px solid var(--who-is-who-border-blue);
+  border-radius: 0.375rem;
+  transition: background-color 0.3s ease;
 }
 
-.room-item span {
-  font-size: 16px;
+.who-is-who-menu-room-item:hover {
+  background: var(--who-is-who-secondary-blue);
+  color: var(--who-is-who-text-light);
 }
 
-.room-item button {
-  padding: 5px 10px;
-  font-size: 14px;
-  cursor: pointer;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 3px;
+.who-is-who-menu-room-id {
+  font-size: 1rem;
+  font-weight: 500;
 }
 
-.room-item button:hover {
-  background-color: #45a049;
+.who-is-who-menu-no-rooms {
+  font-size: 1rem;
+  color: var(--who-is-who-text-dark);
+  opacity: 0.7;
+}
+
+/* Footer */
+.who-is-who-menu-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  color: var(--who-is-who-text-light);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.who-is-who-menu-footer-text {
+  margin: 0;
+}
+
+.who-is-who-menu-footer-button {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--who-is-who-text-light);
+  background-color: var(--who-is-who-primary-blue);
+  border: 1px solid var(--who-is-who-secondary-blue);
+  border-radius: 0.25rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.who-is-who-menu-footer-button:hover {
+  background-color: var(--who-is-who-accent-green);
+  transform: translateY(-1px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .who-is-who-menu-container {
+    padding: 1rem;
+  }
+
+  .who-is-who-menu-title {
+    font-size: 1.75rem;
+  }
+
+  .who-is-who-menu-content {
+    padding: 1rem;
+  }
+
+  .who-is-who-menu-join-room {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .who-is-who-menu-room-code-input,
+  .who-is-who-menu-join-button {
+    width: 100%;
+  }
+
+  .who-is-who-menu-room-item {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .who-is-who-menu-room-join-button {
+    width: 100%;
+  }
+
+  .who-is-who-menu-rooms-title {
+    font-size: 1.25rem;
+  }
+
+  .who-is-who-menu-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
